@@ -1,12 +1,122 @@
 import web3 from './web3'
 
-const address = '0x9F6fC1fFf279bf7599605752bE4894eeba5D3899';
+const address = '0x71fb5826ae743fb4300db17a40f104df12da0a88';
 
 const abi = [
 	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"name": "previousOwner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "OwnershipTransferred",
+		"type": "event"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_toAdd",
+				"type": "address"
+			}
+		],
+		"name": "addAuthorized",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"constant": false,
 		"inputs": [],
-		"name": "checkGoalReached",
+		"name": "enter",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_toRemove",
+				"type": "address"
+			}
+		],
+		"name": "removeAuthorized",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "resetCrowdsale",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "acquisitionsAddress",
+				"type": "address"
+			}
+		],
+		"name": "setAcquisitionsAccount",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "feesAddress",
+				"type": "address"
+			}
+		],
+		"name": "setFeesAccount",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "newFundingGoal",
+				"type": "uint256"
+			}
+		],
+		"name": "setFundingGoal",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "operationAddress",
+				"type": "address"
+			}
+		],
+		"name": "setOperationsAccount",
 		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
@@ -52,9 +162,40 @@ const abi = [
 		"type": "event"
 	},
 	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "whitelist",
+				"type": "string"
+			}
+		],
+		"name": "isWhitelisted",
+		"type": "event"
+	},
+	{
 		"constant": false,
-		"inputs": [],
-		"name": "safeWithdrawal",
+		"inputs": [
+			{
+				"name": "currentPrice",
+				"type": "uint256"
+			}
+		],
+		"name": "setPrice",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "transferOwnership",
 		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
@@ -68,19 +209,7 @@ const abi = [
 	{
 		"inputs": [
 			{
-				"name": "ifSuccessfulSendTo",
-				"type": "address"
-			},
-			{
 				"name": "fundingGoalInEthers",
-				"type": "uint256"
-			},
-			{
-				"name": "durationInMinutes",
-				"type": "uint256"
-			},
-			{
-				"name": "etherCostOfEachToken",
 				"type": "uint256"
 			},
 			{
@@ -95,11 +224,44 @@ const abi = [
 	{
 		"constant": true,
 		"inputs": [],
+		"name": "acquisitions",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
 		"name": "amountRaised",
 		"outputs": [
 			{
 				"name": "",
 				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "authorized",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
 			}
 		],
 		"payable": false,
@@ -128,25 +290,11 @@ const abi = [
 	{
 		"constant": true,
 		"inputs": [],
-		"name": "beneficiary",
+		"name": "fees",
 		"outputs": [
 			{
 				"name": "",
 				"type": "address"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "deadline",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256"
 			}
 		],
 		"payable": false,
@@ -161,6 +309,67 @@ const abi = [
 			{
 				"name": "",
 				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "whitelist",
+				"type": "string"
+			}
+		],
+		"name": "isAuthorized",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "operation",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "ownerAddress",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
 			}
 		],
 		"payable": false,
@@ -196,5 +405,4 @@ const abi = [
 		"type": "function"
 	}
 ]
-
 export default new web3.eth.Contract(abi, address);
